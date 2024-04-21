@@ -2,10 +2,12 @@
   "name": "epicure---back",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "start": "nodemon .",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "node index.ts",
+    "dev": "nodemon index.ts"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +15,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "nodemon": "^3.1.0",
     "typescript": "^5.4.5"
   },
   "dependencies": {
@@ -22,6 +25,6 @@
     "express": "^4.19.2",
     "mongodb": "^6.5.0",
     "mongoose": "^8.3.1",
-    "nodemon": "^3.1.0"
+    "ts-node": "^10.9.2"
   }
 }

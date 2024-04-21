@@ -1,15 +1,15 @@
 import mongoose, { Schema, model, Document, Types } from "mongoose";
-import { IRestaurant } from "./restaurants.modal";
+import { IRestaurantModel } from "../models/restaurants.model";
 
-export interface IChef extends Document {
+export interface IChefModel extends Document {
   name: string;
   image: string;
   description: string;
   isChefOfTheWeek: boolean;
-  restaurants: IRestaurant[];
+  restaurants: IRestaurantModel[];
 }
 
-const chefSchema = new Schema<IChef>({
+const chefSchema = new Schema<IChefModel>({
   name: { type: String, required: true },
   image: { type: String, required: true },
   description: { type: String, required: true },
@@ -19,6 +19,6 @@ const chefSchema = new Schema<IChef>({
   ],
 });
 
-const Chef = mongoose.model<IChef>("Chef", chefSchema);
+const Chef = mongoose.model<IChefModel>("Chef", chefSchema);
 
 export default Chef;

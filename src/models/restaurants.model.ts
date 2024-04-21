@@ -1,16 +1,16 @@
 import mongoose, { Schema, model, Document, Types } from "mongoose";
-import { IChef } from "./chef.modal";
-import { IDish } from "./dish.modal";
+import { IChefModel } from "../models/chef.model";
+import { IDishModel } from "../models/dish.model";
 
-export interface IRestaurant extends Document {
+export interface IRestaurantModel extends Document {
   name: string;
   image: string;
   rating: number;
-  chef: IChef;
-  dishes: IDish[];
+  chef: IChefModel;
+  dishes: IDishModel[];
 }
 
-const restaurantSchema = new Schema<IRestaurant>({
+const restaurantSchema = new Schema<IRestaurantModel>({
   name: { type: String, required: true },
   image: { type: String, required: true },
   rating: { type: Number, required: true },
@@ -18,8 +18,8 @@ const restaurantSchema = new Schema<IRestaurant>({
   dishes: [{ type: Schema.Types.ObjectId, ref: "Dish", required: true }],
 });
 
-const Restaurant = mongoose.model<IRestaurant>(
-  "restaurantSchema",
+const Restaurant = mongoose.model<IRestaurantModel>(
+  "Restaurant",
   restaurantSchema
 );
 
