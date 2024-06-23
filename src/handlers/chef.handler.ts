@@ -1,9 +1,19 @@
 import Chef, { IChefModel } from "../models/chef.model";
+import { EStatus } from "../models/status.enum";
 
 const ChefHandler = {
   async getAll(): Promise<IChefModel[]> {
-    const chefs = await Chef.find().populate("restaurants");
-    return chefs;
+    try {
+      const chefs = await Chef.aggregate([
+        {
+          $match: { status: EStatus.ACTIVE },
+        },
+      ]);
+      return chefs;
+    } catch (error) {
+      console.error("Error fetching chefs:", error);
+      throw error;
+    }
   },
 
   async getChefById(chefId: string): Promise<IChefModel | null> {
@@ -34,7 +44,11 @@ const ChefHandler = {
   },
 
   async deleteChef(chefId: string): Promise<IChefModel | null> {
-    const deletedChef = await Chef.findByIdAndDelete(chefId);
+    const deletedChef = await Chef.findByIdAndUpdate(
+      chefId,
+      { status: EStatus },
+      { new: true }
+    );
     return deletedChef;
   },
 };

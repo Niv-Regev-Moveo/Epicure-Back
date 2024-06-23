@@ -1,11 +1,24 @@
 import { updateDish } from "../controllers/dish.controller";
 import Dish, { IDishModel } from "../models/dish.model";
 import Restaurant from "../models/restaurants.model";
+import { EStatus } from "../models/status.enum";
 
 const DishHandler = {
   async getAll(): Promise<IDishModel[]> {
     try {
-      const dishes = await Dish.find().populate("restaurant");
+      const dishes = await Dish.aggregate([
+        {
+          $lookup: {
+            from: "restaurants",
+            localField: "restaurant",
+            foreignField: "_id",
+            as: "restaurant",
+          },
+        },
+        // {
+        //   $unwind: "$restaurant",
+        // },
+      ]);
       return dishes;
     } catch (error) {
       console.error("Error getting all dishes:", error);
@@ -52,13 +65,12 @@ const DishHandler = {
   },
 
   async deleteDish(dishId: string): Promise<IDishModel | null> {
-    try {
-      const deletedDish = await Dish.findByIdAndDelete(dishId);
-      return deletedDish;
-    } catch (error) {
-      console.error("Error deleting dish:", error);
-      throw error;
-    }
+    const deletedDish = await Dish.findByIdAndUpdate(
+      dishId,
+      { status: EStatus.DELETED },
+      { new: true }
+    );
+    return deletedDish;
   },
 };
 

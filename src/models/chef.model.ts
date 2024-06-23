@@ -1,5 +1,6 @@
 import mongoose, { Schema, model, Document, Types } from "mongoose";
 import { IRestaurantModel } from "../models/restaurants.model";
+import { EStatus } from "./status.enum";
 
 export interface IChefModel extends Document {
   name: string;
@@ -7,6 +8,7 @@ export interface IChefModel extends Document {
   description: string;
   isChefOfTheWeek: boolean;
   restaurants: IRestaurantModel[];
+  status: EStatus;
 }
 
 const chefSchema = new Schema<IChefModel>({
@@ -17,6 +19,12 @@ const chefSchema = new Schema<IChefModel>({
   restaurants: [
     { type: Schema.Types.ObjectId, ref: "Restaurant", required: true },
   ],
+  status: {
+    type: String,
+    enum: EStatus,
+    default: EStatus.ACTIVE,
+    required: true,
+  },
 });
 
 const Chef = mongoose.model<IChefModel>("Chef", chefSchema);

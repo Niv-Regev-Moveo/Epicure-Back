@@ -24,3 +24,23 @@
 
 
 
+
+      // {
+        //   $lookup: {
+        //     from: "chefs",
+        //     localField: "chef",
+        //     foreignField: "_id",
+        //     as: "chef",
+        //   },
+        // },
+        // {
+        //   $unwind: "$chef", // Unwind chef array created by lookup
+        // },
+        // {
+        //   $lookup: {
+        //     from: "dishes",
+        //     localField: "dishes",
+        //     foreignField: "_id",
+        //     as: "dishes",
+        //   },
+        // },

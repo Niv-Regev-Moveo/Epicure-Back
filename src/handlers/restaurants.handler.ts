@@ -1,12 +1,20 @@
 import Chef from "../models/chef.model";
 import Restaurant, { IRestaurantModel } from "../models/restaurants.model";
+import { EStatus } from "../models/status.enum";
 
 const RestaurantHandler = {
   async getAll(): Promise<IRestaurantModel[]> {
-    const restaurants = await Restaurant.find()
-      .populate("chef")
-      .populate("dishes");
-    return restaurants;
+    try {
+      const restaurants = await Restaurant.aggregate([
+        {
+          $match: { status: EStatus.ACTIVE },
+        },
+      ]);
+      return restaurants;
+    } catch (error) {
+      console.error("Error fetching restaurants:", error);
+      throw error;
+    }
   },
 
   async getRestaurantById(
@@ -57,7 +65,11 @@ const RestaurantHandler = {
   async deleteRestaurant(
     restaurantId: string
   ): Promise<IRestaurantModel | null> {
-    const deletedRestaurant = await Restaurant.findByIdAndDelete(restaurantId);
+    const deletedRestaurant = await Restaurant.findByIdAndUpdate(
+      restaurantId,
+      { status: EStatus.DELETED },
+      { new: true }
+    );
     return deletedRestaurant;
   },
 };
